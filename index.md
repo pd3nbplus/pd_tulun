@@ -1,37 +1,80 @@
-## Welcome to GitHub Pages (我是pd)
+# 图论--潘登同学的图论笔记(Python)
 
-You can use the [editor on GitHub](https://github.com/pd3nbplus/pd_tulun/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+## 图的数据结构
+  在数据结构中我们可以知道，图由节点和边构成，那么想实现图的数据结构就必然离不开节点Node，为了避免混淆，我的节点同一命名为**Vertex**；
+  
+  *那么实现Vertex需要一些什么属性和方法呢?*
+  
+  + 节点的名称
+  + 节点的与什么节点连接以及连接的权值
+  + 增加相邻节点(或者叫修改相邻节点的边权值)
+  + 获得相邻节点(就是通过这个节点知道他的相邻节点是什么)
+  + 获得节点名称(由Vertex对象获得自己的名称)
+  + 获得相邻边数据(通过相邻的节点的名称知道他们之间的权值)
+  + 显示设置(如果在命令行把Vertex输入, 显示的东西, 如果不写的话, 就会显示对象地址)
+  
+#### 话不多说 上代码！
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+```python
+class Vertex:
+    def __init__(self, key):
+        self.id = key
+        self.connectedTo = {}     # connectedTo用于储存相邻节点 key是相邻节点(对象而不是名称) value是连接权值
 
-### Markdown
+    def addNeighbor(self, nbr, weight=0):   # 增加相邻边，默认weight为0
+        '''
+        input:
+            nbr: Vertex object
+            weight: int
+        return:
+            None
+        '''
+        self.connectedTo[nbr] = weight
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+    def getConnections(self):   # 获得相邻节点
+        '''
+        input: None
+        return: Vertex object
+        '''
+        return self.connectedTo.keys()
 
-```markdown
-Syntax highlighted code block
+    def getId(self):   # 获得节点名称
+        '''
+        input: None
+        return: key(str)
+        '''
+        return self.id
+    
+    def getWeight(self, nbr):   # 获得相邻边数据
+        '''
+        input: Vertex object
+        return: weight(int)
+        '''
+        return self.connectedTo[nbr]
+    
+    def __str__(self):   # 显示设置(__str__是内置方法，也就是不需要显示的使用这个方法就可以用这个函数)
+        return str(self.id) + 'connectTo:' + \
+               str([x.id for x in self.connectedTo])
 
-# Header 1
-## Header 2
-### Header 3
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+if __name__ == '__main__':
+    # 与节点相关的数据, 链接表
+    a_info = {'x1':['y3', 'y5']}
+    # 新建节点
+    x1 = Vertex('x1')
+    y3 = Vertex('y3')
+    y5 = Vertex('y5')
+    # 根据邻接表添加相邻节点
+    x1.addNeighbor(y3, 1)
+    x1.addNeighbor(y5, 5)
+    # 测试定义的函数功能
+    # 获取节点id
+    print(x1.getId())
+    print(y5.getId())
+    # 获取节点的相邻节点
+    print(x1.getConnections())
+    print(x1)
+    # 由相邻节点获得与相邻节点的权值
+    print(x1.getWeight(y5))
 ```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/pd3nbplus/pd_tulun/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+        
