@@ -294,9 +294,6 @@ np.array([[0, 10, 10, np.inf, np.inf, np.inf],
 如图绘制了多个立方体图
 ![n-立方体图](https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.it610.com%2Fimage%2Finfo10%2F32f9c552dafb42a69ca878b4168142c1.png&refer=http%3A%2F%2Fimg.it610.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1635411402&t=065c4aed6d7281cfc8b8f3859da34c77)
 
-一个3-立方体图如下:
-![3-立方体图](https://i.bmp.ovh/imgs/2021/09/dc91c290b8395db5.png)
-
 + 大家也可以尝试自己构建(推荐一个构建网络的小工具networkx,但是networkx不是本文的主要工具,故不详细讲解,感兴趣的朋友们自己了解哦)
 + 贴上代码
 ```python
@@ -340,3 +337,8 @@ pos1.update({n: (3, 5-3*i) for i, n in enumerate(right)})
 plt.clf()
 nx.draw(G, pos1, **options)
 ```
++ 一个3-立方体图如下:
+![3-立方体图](https://i.bmp.ovh/imgs/2021/09/dc91c290b8395db5.png)
+
++ 圈图
+	>
