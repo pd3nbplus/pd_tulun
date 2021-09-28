@@ -77,4 +77,123 @@ if __name__ == '__main__':
     # 由相邻节点获得与相邻节点的权值
     print(x1.getWeight(y5))
 ```
-        
+  实现完节点了,接下来就是实现图了;
+  
+  *那么图的数据结构都包括什么呢?*
+  
+  + 图的一种储存数据的方式就是邻接表，采取邻接表来储存节点
+  + 图的节点个数
+  + 在图中增加节点
+  + 通过节点的key获得节点对象
+  + 判断节点在不在图中(in 内置函数)
+  + 新增两节点的边
+  + 获取所有节点的名称
+  + 迭代器的实现(通过for 循环把vertex对象取出)
+  
+#### 话不多说 上代码！
+
+```python
+import Vertex  # 导入上面写的代码
+class Graph:
+    def __init__(self):
+        self.vertList = {}  # 这个虽然叫list但是实质上是字典
+        self.numVertices = 0  # 记录节点个数
+
+    def addVertex(self, key):   # 增加节点
+        '''
+        input: Vertex key (str)
+        return: Vertex object
+        '''
+        self.numVertices = self.numVertices + 1
+        newVertex = Vertex(key)   # 创建新节点
+        self.vertList[key] = newVertex
+        return newVertex
+
+	def getVertex(self, key):   # 通过key获取节点信息
+        '''
+        input: Vertex key (str)
+        return: Vertex object
+        '''
+        if key in self.vertList:
+            return self.vertList[key]
+        else:
+            return None
+
+	def __contains__(self, n):  # 判断节点在不在图中
+		'''
+        input: Vertex key (str)
+        return: bool
+        '''
+        return n in self.vertList
+
+	def addEdge(self, from_key, to_key, cost=1):    # 新增边
+		'''
+        input:
+            from_key: vertex key (str)
+            to_key: vertex key (str)
+            cost: int
+        return:
+            None
+        '''
+        if from_key not in self.vertList:      # 不再图中的顶点先添加
+            self.addVertex(from_key)
+        if to_key not in self.vertList:
+            self.addVertex(to_key)
+        # 调用起始顶点的方法添加邻边
+        self.vertList[from_key].addNeighbor(self.vertList[to_key], cost)
+
+	def getVertices(self):   # 获取所有顶点的名称
+        return self.vertList.keys()
+
+	def __iter__(self):  # 迭代取出
+        return iter(self.vertList.values())  # 采用iter直接转成可迭代对象
+
+	def __len__(self):  # 查看节点个数
+        return self.numVertices
+
+if __name__ == '__main__':
+    # 邻接表
+    g_dict ={'1':[['2', 10], ['3', 10]],
+             '2':[['3', 2], ['4', 4], ['5', 8]],
+             '3':[['5', 9]],
+             '4':[['6', 10]],
+             '5':[['4', 6], ['6', 10]]}
+    # 创建graph对象
+    g = Graph()
+    # 在Graph中vertList的数据结构其实就是上面这个
+    # 遍历g_dict
+    for from_key in g_dict:
+                for to_key in g_dict[from_key]:
+                    g.addEdge(from_key, to_key[0], [0, to_key[1]])
+    # 测试通过节点名称获取节点
+    print(g.getVertex('3'))
+    # 获得所有节点的名称
+    print(g.getVertices())
+    # 查看节点个数
+    print(len(g))
+    # 判断节点在不在图中
+    print('7' in g, '3' in g)
+```
+
+**OK!!, 现在我们已经成功实现了图的数据结构, 有了数据结构我们就可以用图的特性搞点事情了！！！**
+
+细心的同学已经注意到了, 上面刚刚出现了邻接表这个词语, 当然总是跟他相提并论的还有邻接矩阵,我们先把这两个概念说清楚；
+
+### 图的邻接表
+
+图的邻接表存储法。邻接表既适用于存储无向图，也适用于存储有向图；
+
+在具体讲解邻接表存储图的实现方法之前，先普及一个"邻接点"的概念。在图中，如果两个点相互连通，即通过其中一个顶点，可直接找到另一个顶点，则称它们互为邻接点；
+
+	邻接指的是图中顶点之间有边或者弧的存在。
+	
+
+
+
+
+
+
+
+
+
+
