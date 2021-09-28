@@ -282,11 +282,61 @@ np.array([[0, 10, 10, np.inf, np.inf, np.inf],
 		> 证明留给读者喔！
 
 #### 在简单图范畴下的其他有特点的图
-	+ 零图,离散图
-		> G中全是孤立顶点, 也称0-正则图
-	+ 正则图
-		> 所有顶点度数都相同的图, 若所有顶点度数均为k, 则称k-正则图
-	+ 完全图
-		> 任意两个顶点都有边, 也称n-正则图
-	
-		
++ 零图,离散图
+	> G中全是孤立顶点, 也称0-正则图
++ 正则图
+	> 所有顶点度数都相同的图, 若所有顶点度数均为k, 则称k-正则图
++ 完全图
+	> 任意两个顶点都有边, 也称n-正则图
++ n-立方体图
+	> 其实长的就跟立方体一样,但由于图是平面的,下面给出严谨的数学定义
+	> 如果图的顶点集v由集合{0,1}上的所有长为n的二进制串组成,两个顶点的相邻当且仅当他们的标号序列仅在一位数字上不同
+如图绘制了多个立方体图
+![n-立方体图](https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.it610.com%2Fimage%2Finfo10%2F32f9c552dafb42a69ca878b4168142c1.png&refer=http%3A%2F%2Fimg.it610.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1635411402&t=065c4aed6d7281cfc8b8f3859da34c77)
+
+一个3-立方体图如下:
+![3-立方体图](https://i.bmp.ovh/imgs/2021/09/dc91c290b8395db5.png)
+
++ 大家也可以尝试自己构建(推荐一个构建网络的小工具networkx,但是networkx不是本文的主要工具,故不详细讲解,感兴趣的朋友们自己了解哦)
++ 贴上代码
+```python
+import networkx as nx
+import matplotlib.pyplot as plt
+
+
+G = nx.Graph()
+points = {'100':['101', '110', '000'],
+          '110':['111', '100', '010'],
+          '000':['001', '010', '100'],
+          '001':['101', '011', '000'],
+          '011':['001', '111', '010'],
+          '101':['111', '100', '001'],
+          '111':['110', '101', '011'],
+          '010':['110', '011', '000']}
+for i in points:
+    for j in points[i]:
+        G.add_edge(i, j)
+ # 设置节点的位置
+left = ['100', '110']
+middle_left = ['000', '010']
+middle_right = ['001', '011']
+right = ['101', '111']
+
+options = {
+        "font_size": 36,
+        "node_size": 100,
+        "node_color": "white",
+        "edgecolors": "black",
+        "edge_color": 'red',
+        "linewidths": 5,
+        "width": 5,
+        'alpha':0.8,
+        'with_labels':True
+    }
+pos1 = {n: (0, 5-3*i) for i, n in enumerate(left)}
+pos1.update({n: (1, 4-i) for i, n in enumerate(middle_left)})
+pos1.update({n: (2, 4-i) for i, n in enumerate(middle_right)})
+pos1.update({n: (3, 5-3*i) for i, n in enumerate(right)})
+plt.clf()
+nx.draw(G, pos1, **options)
+```
