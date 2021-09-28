@@ -296,6 +296,7 @@ np.array([[0, 10, 10, np.inf, np.inf, np.inf],
 
 + 大家也可以尝试自己构建(推荐一个构建网络的小工具networkx,但是networkx不是本文的主要工具,故不详细讲解,感兴趣的朋友们自己了解哦)
 + 贴上代码
+
 ```python
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -337,6 +338,7 @@ pos1.update({n: (3, 5-3*i) for i, n in enumerate(right)})
 plt.clf()
 nx.draw(G, pos1, **options)
 ```
+
 + 一个3-立方体图如下:
 ![3-立方体图](https://i.bmp.ovh/imgs/2021/09/dc91c290b8395db5.png)
 
