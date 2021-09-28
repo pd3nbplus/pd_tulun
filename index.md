@@ -205,6 +205,16 @@ g_dict ={'1':[['2', 10], ['3', 10]],
 ### 图的邻接矩阵
 
 图的邻接矩阵大家都很熟悉, 就是用一个矩阵来表示点与点之间的关系, 沿用上面邻接表的例子;
++ 具体长这样
+```python
+import numpy as np
+np.array([[0, 10, 10, np.inf, np.inf, np.inf],
+          [np.inf, 0, 2, 4, 8, np.inf],
+          [np.inf, np.inf, 0, np.inf, 9, np.inf],
+          [np.inf, np.inf, np.inf, 0, np.inf, 10],
+          [np.inf, np.inf, np.inf, 6, 0, 10],
+          [np.inf, np.inf, np.inf, np.inf, np.inf, 0]])
+```
 
 
 
