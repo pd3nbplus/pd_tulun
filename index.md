@@ -304,16 +304,16 @@ import matplotlib.pyplot as plt
 
 G = nx.Graph()
 points = {'100':['101', '110', '000'],
-          '110':['111', '100', '010'],
-          '000':['001', '010', '100'],
-          '001':['101', '011', '000'],
-          '011':['001', '111', '010'],
-          '101':['111', '100', '001'],
-          '111':['110', '101', '011'],
-          '010':['110', '011', '000']}
+		  '110':['111', '100', '010'],
+		  '000':['001', '010', '100'],
+		  '001':['101', '011', '000'],
+		  '011':['001', '111', '010'],
+		  '101':['111', '100', '001'],
+		  '111':['110', '101', '011'],
+		  '010':['110', '011', '000']}
 for i in points:
-    for j in points[i]:
-        G.add_edge(i, j)
+	for j in points[i]:
+		G.add_edge(i, j)
  # 设置节点的位置
 left = ['100', '110']
 middle_left = ['000', '010']
@@ -321,16 +321,16 @@ middle_right = ['001', '011']
 right = ['101', '111']
 
 options = {
-        "font_size": 36,
-        "node_size": 100,
-        "node_color": "white",
-        "edgecolors": "black",
-        "edge_color": 'red',
-        "linewidths": 5,
-        "width": 5,
-        'alpha':0.8,
-        'with_labels':True
-    }
+		"font_size": 36,
+		"node_size": 100,
+		"node_color": "white",
+		"edgecolors": "black",
+		"edge_color": 'red',
+		"linewidths": 5,
+		"width": 5,
+		'alpha':0.8,
+		'with_labels':True
+	}
 pos1 = {n: (0, 5-3*i) for i, n in enumerate(left)}
 pos1.update({n: (1, 4-i) for i, n in enumerate(middle_left)})
 pos1.update({n: (2, 4-i) for i, n in enumerate(middle_right)})
