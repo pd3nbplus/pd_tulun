@@ -5,9 +5,10 @@
     + <a href="#无向图">无向图</a>
     + <a href="#有向图">有向图</a>
     + <a href="#道路、回路与连通性">道路、回路与连通性</a>
+    + <a href="#欧拉图">欧拉图</a>
+    + <a href="#哈密顿图">哈密顿图</a>
 + 
-<p id="图的数据结构"><h2 id="图的数据结构">图的数据结构</h2></p>
-
+## <p id="图的数据结构">图的数据结构</p>
   在数据结构中我们可以知道，图由节点和边构成，那么想实现图的数据结构就必然离不开节点Node，为了避免混淆，我的节点同一命名为**Vertex**；
   
   *那么实现Vertex需要一些什么属性和方法呢?*
@@ -461,4 +462,363 @@ nx.draw(G, pos1, **options)
 + `连通分支`(重要)
 > 假设无向图G=(V,E)的顶点集V在可达关系下的等价类为{v1, v2, ..., vk},则G关于vi的导出子图称作G的一个连通分支(其中i=1,2,...,k)
 > 
-> 如果形象理解连通分支呢？ 我们都学过
+> 如果形象理解连通分支呢？ 我举一个通俗一点的例子好了
+> 
+> 就拿国家与国家之间的关系来理解好了, 一个国家可能有很大的疆域也可能只有很小的疆域;
+> 但是在与其他的国家进行外交的时候,无论这个国家再小,都是以一个独立的身份与别国外交;
+> 而无论某个国家的某个地区的实力再强大,也不能独立的与别国外交(即一个国家只会一个身份去与别国外交);
+> 
+> 而连通分支就是来描述这样一种情况, 在一个网络中, 有很多的顶点, 但是很多顶点都有共性(比如他们500年前是一家), 那么就可以把他们看成一个顶点,这样就方便分析了
+> 
+> 而这个共性具体来说就是; `互相可达`(就是这一堆的任何顶点都可以达到另一个顶点(也要在网络内))
+
+> 后面还会讲到怎么求解连通分支的kosaraju算法
++ 一个包含三个连通分支的图如下:
+![连通分支](https://tse1-mm.cn.bing.net/th/id/R-C.b83b407a9a05dca4f8ec6be475ea0833?rik=0kSsQRXtBwfiAA&riu=http%3a%2f%2fblog.kongfy.com%2fwp-content%2fuploads%2f2015%2f03%2fB0842D09-98C3-4F8C-B551-315CBAC0874E.jpg&ehk=bB1q8GegpNLKLu%2bFcZrOknJZJ3mq47zCIrzkdMVPeME%3d&risl=&pid=ImgRaw&r=0)
+
++ 割边(桥)
+> 假设G=(V,E,r)是连通图, 若e∈E,且G-e(从G中去掉边e)不连通,则称e是图G中的一条割边或桥
+> 
+> 如上图的7→9就是桥, 因为去掉之后图就不连通了
+
++ `定理`
+> 连通图中的边e是桥, 当且仅当e不属于图中任意的一条回路;(因为回路一定是有来又回,如果桥在回路里面,那把他去掉图仍然是连通的)
+
++ 有向图的连通
+> 假设G是有向图,如果忽略图中边的方向后得到的无向图是连通的,则称G为连通的;否则就是不连通的
+
++ 强连通, 单向连通
+> 有向连通图G, 对于图中任意两个顶点u和v,u到v 和 v到u都是可达的,则称G为强连通的;
+> 如果图中任意两个顶点u和v, u到v 和 v到u至少之一是可达的,则称G为单向连通的
+
++ 有向无环图(DAG)
+> 有向图G,如果图中不存在有向回路,则称G为有向无环图
+
+
+### <p id="欧拉图">欧拉图</p>
+
++ 欧拉图
+
+其实欧拉图的来源是那个柯尼斯堡七桥问题,这不是本文重点,感兴趣的同学自行百度喔
+
+> 通过图G中每条边一次且仅一次的道路称作该图的一条欧拉道路;(相当于一笔画)
+> 
+> 通过图G中每条边一次且仅一次的回路称作该图的一条欧拉回路;(相当于头尾相连的一笔画)
+> 
+> 存在欧拉回路的图称作欧拉图
+
++ 一些例子如下:
+
+![欧拉图](https://www.pianshen.com/images/806/d8c8d30da77eec0b7c3491b1d0b5a766.png)
+
++ `欧拉图的充要条件`
+> 无向图G是欧拉图当且仅当G是连通的而且所有顶点都是`偶数度`
+
+`证明`: (必要性)假设G是欧拉图,即图中有欧拉回路,即对于任意一个顶点,有入必有出,因此每个顶点都是偶数度;
+
+(充分性)设G的顶点是偶数度, 采用构造法证明欧拉回路的存在性: 
+
+从任意点v0出发,构造一条简单回路C, 因为各顶点的度数都是偶数, 因此一定能够回到v0, 构造简单回路;**(!!!想清楚了再往下看!!!)**
+
+下一步,在上面构造的简单回路中挑一点再剩余的点和边中构造简单函数,重复该过程,直到不能再构造为止.
+
++ `定理`
+> 无向图G存在欧拉道路当且仅当G是连通的而且G中奇数度顶点不超过两个
+
+`证明`: (必要性)G中一条欧拉道路L,在L中除起点和终点之外,其余每个顶点都与偶数条边(一条入,一条出)相关联. 因此, G中至多有两个奇数度的顶点
+
+(充分性) ①若G中没有奇数度的顶点u,v,由上面定理,存在欧拉回路,显然是欧拉道路
+
+②若G中有两个奇数度顶点u,v,那么连接uv,根据上面定理,可知存在一个欧拉回路C,从C中去掉边uv,得到顶点为u,v的一条欧拉道路(当我证到这的时候,应该有妙蛙妙蛙的声音)
+
+#### `(算法)`构造欧拉回路 Fleury(G)
+
+前提:得存在
+
+输入: 至多有两个奇数度顶点的图G=(V,E,r)
+
+输出:以序列的形式呈现欧拉回路/道路Π
+
+算法流程:
+
+    ① 选择图中一个奇数度的顶点v∈V,如果图中不存在奇数度顶点,则任取一个顶点v, 道路序列Π←v
+
+    ② while |E| ≠ 0
+        if 与v关联的边多余一条,则任取其中不是桥的一条边e:
+        else 选择该边e:
+            假设e的两个端点是v,u, Π←Π·e·u, v←u
+            删除边e及孤立顶点(如果有)
+    ③ 输出序列
+
++ `定理` 
+> 假设连通图G中有k个度为奇数的顶点,则G的边集可以划分成 k/2 条简单道路,而不能分解为(k/2 - 1)或更少条道路
+
+`证明`: (前半句) 由握手定理知k必为偶数.将这k个顶点两两配对,然后增添互不相邻的k/2条边,得到一个无奇数度顶点的连通图G',
+
+那么由前面的定理知,G'存在欧拉回路C,在C中删去增添的k/2条边, 便得到了k/2条简单道路;
+
+(后半句) 假设图G的边集可以分为q条简单道路,则在图G中添加q条边可以得到欧拉图G',因此图中所有顶点都是偶数度,而每添加一条边最多可以把两个奇数度顶点变为偶数度,即2q≥k
+
++ 无向图的欧拉道路--推广-->有向图
+`定理`
+> 有向图G中存在欧拉道路当且仅当G是连通的,而且G中每个顶点的入度都等于出度;
+> 
+> 有向图G中存在欧拉道路,但不存在欧拉回路当且仅当G是连通的;
+> 
+> 除两个顶点外,每个顶点的入度都等于出度,而且这两个顶点中一个顶点的入度比出度大1,另一个的入度比出度小1;
+
+### <p id="哈密顿图">哈密顿图</p>
+
++ 哈密顿图
+> 图中含有`哈密顿回路`的图
+
++ 哈密顿道路
+> 通过图G中每个顶点一次且仅一次的道路称作该图的一条哈密顿道路;
+
++ 哈密顿回路
+> 通过图G中每个顶点一次且仅一次的回路称作该图的一条哈密顿回路;
+
++ `注意`
+> 1.图G中存在自环/重边不影响哈密顿回路/道路的存在性
+> 
+> 2.哈密顿图中一定不存在悬挂边
+> 
+> 3.存在哈密顿道路的图中不存在孤立顶点
+
++ 例子: 科学家排座问题
+> 由七位科学家参加一个会议,已知A只会讲英语;B会讲英、汉;C会讲英、意、俄;D会日、汉;E会德、意;
+> 
+> F会法、日、俄;G会讲德、法;安排他们坐在一个圆桌,使得相邻的科学家都可以使用相同的语言交流;
+
+这就是一个很经典的哈密顿图的例子,转换一下,就是把他们之间的关系用图来表示,再在图中找一条哈密顿回路;
+
+将讲相同语言的科学家之间连一条边,构造图,如下:
+
+![科学家排座图](https://i.bmp.ovh/imgs/2021/09/aabd57aee6694326.png)
+
+`构图代码`
+```python
+# %%科学家排座问题
+import networkx as nx
+import matplotlib.pyplot as plt
+
+G = nx.Graph()
+a_dict = {'A':['English'],
+          'B':['English', 'Chinese'],
+          'C':['English', 'Italian', 'Russian'],
+          'D':['Japanese', 'Chinese'],
+          'E':['German', 'Italian'],
+          'F':['French', 'Japanese', 'Russian'],
+          'G':['German', 'French']}
+
+# 用于储存相邻节点, key是语言， value是people_name
+neighbors_dict = {}
+for people_name in a_dict:
+    G.add_node(people_name)
+    for language in a_dict[people_name]:
+        # 如果这个语言在neighbors_dict, 那么就把会这门语言的其他人
+        # 与这个人之间连接一条边， 否则就把这个人会的语言加到dict中
+        if language in neighbors_dict:
+            for people_name_exist in neighbors_dict[language]:
+                G.add_edge(people_name_exist, people_name, language=language)
+            neighbors_dict[language].append(people_name)
+        else:
+            neighbors_dict[language] = [people_name]
+
+options = {
+        "font_size": 36,
+        "node_size": 100,
+        "node_color": "white",
+        "edgecolors": "white",
+        "edge_color": 'red',
+        "linewidths": 5,
+        "width": 5,
+        'alpha':0.8,
+        'with_labels':True
+    }
+pos = nx.spring_layout(G)
+plt.clf()
+nx.draw(G, pos, **options)
+
+# 显示edge的labels
+edge_labels = nx.get_edge_attributes(G, 'language')
+nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=10, font_color='blue')
+```
+
+
+再寻找一条回路经过所有顶点,这里我们采用DFS(深度优先搜索)
+
+`DFS深度优先搜索`
+> DFS的本质是暴力搜索算法,也称回溯算法,就是一种在找不到正确答案的时候回退一步,再继续向前的算法
+
+算法的思想很简单,但是实际操作可能会有点不好理解;下面我们通过几个小案例来深入理解DFS算法
+
++ 例子1：
+> 全排列问题： 给出一个数字n，要求给出1-n的全排列,输出结果为列表
+
+如给定数字3, 那结果就是[[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
+
+上代码!!!
+
+```python
+# 回溯算法
+def template(n):  # 主函数(设定他的目的是保证储存结果的result不会因为递归栈的关闭而丢失)
+    result = []  # 这个保存结果
+
+    def trace(path, choices):  # 递归函数
+        '''
+        path: 用于储存目前排列
+        choices: 用于储存所有可选择的数字(1-n)
+        '''
+        if len(path) == n:  # 当path的长度等于输入的n时，结束算法，把结果加入结果列表
+            result.append(list(path))
+            return
+
+        for item in choices:
+            if item in path:  # 减枝操作(如果path里面有item这个数)
+                continue
+            path.append(item)  # 如果没有就把他加到目前的path中
+            trace(path, choices)  # 递归调用自身
+            path.pop()  # 撤销最后一次的选择继续向前找答案
+
+    trace([], range(1, n+1))  # 调用函数trace
+    return result
+
+if __name__ == '__main__': 
+    print(template(3))
+```
+
+观察到输出结果与上面预期一致,(回溯算法是后面很多算法的基础)
+
++ 例子2:
+> 给定一个5*5的*矩阵,里面有零元素,要求在矩阵里面5个0,使得每一行每一列都有零
+> 
+> [[7, 0, 2, 0, 2],[4, 3, 0, 0, 0],[0, 8, 3, 5, 3],[11, 8, 0, 0, 4],[0, 4, 1, 4, 0]]
+
+上代码!!!
+
+```python
+#%%矩阵找零
+import copy
+def template(matrix):  # 主函数(设定他的目的是保证储存结果的result不会因为递归栈的关闭而丢失)
+    result = []  # 这个保存结果
+
+    def trace(path, choices):  # 递归函数
+        '''
+        path: dict 用于储存找到的零 key表示row values表示column
+        choices: 矩阵matrix
+        '''
+        if len(path) == len(matrix):  # 当path的长度等于输入的n时，结束算法，把结果加入结果列表
+            if path not in result:
+                result.append(copy.deepcopy(path))
+            return
+
+        for row, items in enumerate(choices):
+            for column, j in enumerate(items):
+                if j == 0:  # 当元素为零时
+                    if row in path.keys():
+                        continue
+                    if column in path.values():  # 减枝操作(如果path里面有column,说名这一列已经有零了)
+                        continue
+                    path[row] = column  # 如果没有就把他加到目前的path中
+                    trace(path, choices)  # 递归调用自身
+                    path.popitem()  # 撤销最后一次的选择继续向前找答案
+
+    trace({}, matrix)  # 调用函数trace
+    return result
+if __name__ == '__main__':
+    matrix = [[7, 0, 2, 0, 2],
+              [4, 3, 0, 0, 0],
+              [0, 8, 3, 5, 3],
+              [11, 8, 0, 0, 4],
+              [0, 4, 1, 4, 0]]
+    print(template(matrix))
+```
+
+可以看到最终返回了两个结果:
+
+> [{0: 1, 1: 2, 2: 0, 3: 3, 4: 4}, {0: 1, 1: 3, 2: 0, 3: 2, 4: 4}]
+> 
+> 表示的就是第0行选择第1列,第1行选择第2列,第2行选择第0列,第3行选择第3列,第4行选择第4列;带回矩阵验证发现符合条件
+
+其实可以把例子2中的问题转换一下,又变成一个排列问题,仍然采用相同的方法求解
+
++ 例子2(变形):
+> 在[2,4],[3,4,5],[1],[4,5],[1,5]中找到1-5的一个排列（如2，3，1，4，5）
+> 
+> 把所有可能的结果输出成列表
+
+上代码!!!
+
+```python
+#%%将矩阵找零问题转化
+import copy
+def template(a):
+    result = []
+
+    def trace(path,choices):
+        if len(path) == len(choices):
+            if path not in result:
+                result.append(copy.deepcopy(path))
+            return
+
+        for row, items in enumerate(choices):
+            if len(path) != row:  # path的元素的index对应choice的第几行
+                continue  # 要是没有这一个if判断,path中储存的元素会乱
+            for j in items:
+                if j in path:
+                    continue
+                path.append(j)
+                trace(path,choices)
+                path.pop()  #删掉最后一个元素
+    trace([],a)
+    return result
+
+if __name__ == '__main__':
+    a = [[2,4],[3,4,5],[1],[3,4],[1,5]]
+    print(template(a))
+```
+
+可以看到结果是一致的
+
++ 例子3:给定两个整数 n 和 k，返回范围 [1, n] 中所有可能的 k 个数的组合
+
+上代码!!!
+```python
+#%%77. 组合
+# 给定两个整数 n 和 k，返回范围 [1, n] 中所有可能的 k 个数的组合。
+class Solution(object):
+    def combine(self, n, k):
+        """
+        :type n: int
+        :type k: int
+        :rtype: List[List[int]]
+        """
+        result = []
+        def trace(path, choices, k):
+            if len(path) == k:
+                path = sorted(path)
+                if path not in result:
+                    result.append(path)
+                return
+            for items in choices:
+                if items in path:
+                    continue
+                path.append(items)
+                trace(path,choices, k)
+                path.pop()
+        
+        trace([], range(1, n+1), k)
+        return result
+
+if __name__ == '__main__':
+    print(Solution().combine(4, 2))
+```
+
+可以看到结果符合题意
+
+经过上面几个例子的引入,同学们对回溯算法应该比较了解了,现在我们来完成科学家的排座问题吧!
+
+#### **科学家排座问题**
+
++ 修改数据结构,因为
