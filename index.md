@@ -994,6 +994,7 @@ if __name__ == '__main__':
 ![证明图](https://i.bmp.ovh/imgs/2021/09/c589cacea73f705f.png)
 
 + 上图代码
+
 ```python
 #%%彼得森图不是平面图的证明
 plt.rcParams['font.sans-serif'] = ['SimHei']
@@ -1111,6 +1112,7 @@ plt.title('Petersen图的子图的细分同构')
 ![算法例子](https://i.bmp.ovh/imgs/2021/10/54e91db629c8d60d.png)
 
 + 上图代码
+
 ```python
 #%%可平面性的判定例子
 G = nx.Graph()
